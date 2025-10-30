@@ -1,0 +1,16 @@
+{
+  "name": "satori-hub",
+  "version": "1.0.0",
+  "description": "A platform to learn ",
+  "license": "ISC",
+  "author": "Mohammad Taaha Ashraf",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
+  }
+}
