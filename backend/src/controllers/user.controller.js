@@ -2,11 +2,11 @@ import { User } from "../models/user.model";
 
 export const registerUser = async (req, res) => {
     try{
-        const {firstName, lastName, userName, email, password, confirmPassword} = req.body;
+        const {firstName, lastName, userName, email, password} = req.body;
          //check existingUser 
          const ifUserExist = await User.findOne({email});
          if(ifUserExist){
-            return res.status(401).json({message: `User already exist`, error})
+            return res.status(409).json({message: `User already exist`})
          }
 
          const newUser = await User.create({
@@ -15,7 +15,6 @@ export const registerUser = async (req, res) => {
             userName, 
             email,
             password,
-            confirmPassword,
          })
 
          return res.status(201).json({

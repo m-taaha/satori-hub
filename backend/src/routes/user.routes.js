@@ -1,8 +1,12 @@
-import express from "express";
+import {Router} from "express";
 import { loginUser, logOut, registerUser } from "../controllers/user.controller.js";
-const userRouter = express.Router();
+import { registerUserSchema, loginUserSchema } from "../validators/user.validator.js";
+import validate from "../middlewares/validate.middleware.js";
 
-userRouter.post("/register", registerUser)
+
+const userRouter = Router();
+
+userRouter.post("/register", validate(registerUserSchema),  registerUser)
 userRouter.post("/login", loginUser)
 userRouter.post("/logout", logOut)
 
