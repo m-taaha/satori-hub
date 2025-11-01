@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema(
       required: [true, `Please enter your password`],
       trim: true
     },
+    confirmPassword: {
+      type: String,
+      required: [true, `enter your password again`],
+      trim: true
+    },
   },
   { timestamps: true }
 );
