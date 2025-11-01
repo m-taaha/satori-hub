@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcrypt from "bcryptjs"
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -29,16 +29,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, `Please enter your password`],
       trim: true
-    },
-    confirmPassword: {
-      type: String,
-      required: [true, `enter your password again`],
-      trim: true
-    },
+    }
   },
   { timestamps: true }
 );
 
+//pre save hook for saving password
+userSchema.pre("save", async function (next) {
+  //calls this function only when the password is modified or created
+  if(!this.isModified('password')) return next();
+
+
+  const salt = await bcrypt.genSalt(10);
+  this.password=await bcrypt.hash(this.password, salt);
+  next();
+})
+
+//comparing password
+userSchema.methods.matchPassword  = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+}
 
 
 
