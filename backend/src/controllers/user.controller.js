@@ -37,7 +37,59 @@ export const registerUser = async (req, res) => {
  }
 
 export const loginUser = async (req, res) => {
+    try{
+      const { email, password } = req.body;
+      const user = User.findOne({ email });
+      //check if user exists
+      if (!user) {
+        return res.status(401).json({
+          message: `Invlaid Credentials: User does not exist`,
+        });
+      }
 
+      //check if password matches
+
+      const isMatch = await user.matchPassword(password);
+      
+      if(!isMatch) {
+        return res.status(401).json({
+          message: `Invalid Credentials`,
+        });
+      }
+
+      //generate jwt user token key and send it back
+      const userToken = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: process.env.EXPIRES_IN,
+        }
+      );
+
+      //set userToken in httpOnly cookies
+      res.cookies("userToken", userToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, //7days
+      });
+
+      return res.status(200).json({
+        message: "User Logged In Successfully",
+        user: {
+          id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userName: user.userName,
+          email: user.email,
+        },
+      });
+    }catch(error){
+          console.log(`Error in Login User:`, error);
+          return res.status(500).json({
+            message: `Sever Error`,
+          });
+    }
 }
 
 export const logOut = async (req, res) => {
