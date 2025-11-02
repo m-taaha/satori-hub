@@ -39,7 +39,8 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try{
       const { email, password } = req.body;
-      const user = User.findOne({ email });
+
+      const user = await User.findOne({ email });
       //check if user exists
       if (!user) {
         return res.status(401).json({
@@ -50,7 +51,7 @@ export const loginUser = async (req, res) => {
       //check if password matches
 
       const isMatch = await user.matchPassword(password);
-      
+
       if(!isMatch) {
         return res.status(401).json({
           message: `Invalid Credentials`,
@@ -60,14 +61,14 @@ export const loginUser = async (req, res) => {
       //generate jwt user token key and send it back
       const userToken = jwt.sign(
         { userId: user._id },
-        process.env.JWT_SECRET_KEY,
+        process.env.JWT_USER_KEY,
         {
           expiresIn: process.env.EXPIRES_IN,
         }
       );
 
       //set userToken in httpOnly cookies
-      res.cookies("userToken", userToken, {
+      res.cookie("userToken", userToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
