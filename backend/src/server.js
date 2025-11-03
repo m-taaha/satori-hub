@@ -3,6 +3,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
+import resourceRouter from "./routes/resource.routes.js";
 
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 
 app.use("/api/v1", userRouter)
+app.use("api/v1/resources", resourceRouter )
 
 app.listen(PORT, () => {
     console.log(`Server is running on: http://localhost:${PORT}`);
