@@ -94,5 +94,25 @@ export const loginUser = async (req, res) => {
 }
 
 export const logOut = async (req, res) => {
-    
+  //to logout we will set the token to null and clear it's value
+  //set the expiration date to a time in the past
+
+  try {
+    res.clearCookie("userToken", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
 }
