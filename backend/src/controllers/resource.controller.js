@@ -1,3 +1,3 @@
-export const resourceUpload = async (req, res) => {
+export const uploadResource = async (req, res) => {
 
 }
