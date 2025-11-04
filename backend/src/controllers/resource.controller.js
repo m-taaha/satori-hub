@@ -2,13 +2,15 @@ import { Resource } from "../models/resource.model.js"
 export const uploadResource = async (req, res) => {
     try{
 
-        const { title, description, difficulty, category, thumbnailImage, resourceType, resourceLink} = req.body;
-
-        if(!title || !description || !difficulty || !category || !resourceType || !resourceLink ){
-            return res.status(401).json({
-               message: `Required fields cannot be empty`
-            })
-        }
+        const { 
+            title, 
+            description, 
+            difficulty, 
+            category, 
+            thumbnailImage, 
+            resourceType, 
+            resourceLink
+        } = req.body;
 
         const newResource = await Resource.create({
             title,
