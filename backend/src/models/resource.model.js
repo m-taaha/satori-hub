@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const resourceSchema = new mongoose.Schema({
     title:{
@@ -12,6 +12,7 @@ const resourceSchema = new mongoose.Schema({
         trim: true
     },
     difficulty:{
+        type: String,
         enum: ["Hard", "Medium", "Easy"],
         required: true,
         trim: true

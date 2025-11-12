@@ -1,4 +1,4 @@
-import { file } from "zod";
+
 import { Resource } from "../models/resource.model.js"
 
 //uploading resources
@@ -52,6 +52,7 @@ export const getAllResources = async (req, res) => {
     }
 }
 
+//search my own resources
 export const searchMyResources = async (req, res) => {
     try{
         const {search, category, difficulty, resourceType} = req.query;
@@ -78,5 +79,37 @@ export const searchMyResources = async (req, res) => {
         return res.status(500).json({
             message: `Server Error`,
         })
+    }
+}
+
+//upadting the resources
+export const updateResource = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const updates = req.body;
+
+        //only update if the resource belong the logged in user
+        const updated = await Resource.findOneAndUpdate(
+            {_id: id, author: req.user._id},
+            updates,
+            {new: true}
+        );
+
+        if(!updated) {
+            return res.status(404).json({
+                message: "Resource not found found or unauthorized"
+            })
+        }
+
+        return res.status(200).json({
+            message: "Resource updated successfully",
+            resource: updated
+        });
+
+    }catch(error){
+        console.log("Update Error:", error.message);
+        return res.status(500).json({
+          message: `Server Error`,
+        });
     }
 }

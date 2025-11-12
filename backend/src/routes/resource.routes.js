@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllResources, searchMyResources, uploadResource } from "../controllers/resource.controller.js";
+import { getAllResources, searchMyResources, updateResource, uploadResource } from "../controllers/resource.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { uploadResourceSchema } from "../validators/resource.validator.js";
 import validate from "../middlewares/validate.middleware.js";
@@ -15,7 +15,10 @@ resourceRouter.post("/upload",
 resourceRouter.get("/my-resources", isAuthenticated,  getAllResources);
 
 //route to get resource based on search
-resourceRouter.get("/my-resources/search", isAuthenticated, searchMyResources)
+resourceRouter.get("/my-resources/search", isAuthenticated, searchMyResources);
+
+//routes to update your resources
+resourceRouter.put("/update/:id", isAuthenticated, updateResource)
 
 
 
