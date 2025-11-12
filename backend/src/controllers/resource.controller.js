@@ -113,3 +113,28 @@ export const updateResource = async (req, res) => {
         });
     }
 }
+
+//deleting resources 
+export const deleteResource = async () => {
+    try{
+        const {id} = req.params;
+
+        const resource = await Resource.findOneAndDelete({_id: id, author: req.user._id});
+
+        if(!resource){
+            return res.status(404).json({
+                message: "Resource not Found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Resource Deleted successfully",
+            deletedResource: id,
+        })
+    }catch(error){
+          console.log("Delete Error:", error.message);
+          return res.status(500).json({
+            message: `Server Error`,
+          });
+    }
+}
