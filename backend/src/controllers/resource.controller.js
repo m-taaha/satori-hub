@@ -70,7 +70,7 @@ export const searchMyResources = async (req, res) => {
             ];
         }
         
-        const resources = (await Resource.find(filter)).toSorted({createdAt: -1});
+        const resources = (await Resource.find(filter)).sort({createdAt: -1});
         return res.status(200).json({resources})
 
 
@@ -115,7 +115,7 @@ export const updateResource = async (req, res) => {
 }
 
 //deleting resources 
-export const deleteResource = async () => {
+export const deleteResource = async (req, res) => {
     try{
         const {id} = req.params;
 
