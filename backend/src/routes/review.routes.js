@@ -10,7 +10,9 @@ reviewRouter.post("/:resourceId/review",
     isAuthenticated,
     validate(createReviewSchema),
     createReview
-
 )
+
+// GET all reviews for a specific resource publically
+reviewRouter.get("/:resourceId/reviews", getResourceReviews);
 
 export default reviewRouter;
