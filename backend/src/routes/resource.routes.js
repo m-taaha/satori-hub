@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteResource, getAllResources, getMyResources, searchMyResources, searchResources, updateResource, uploadResource } from "../controllers/resource.controller.js";
+import { deleteResource, getAllResources, getMyResources, getSingleResource, searchMyResources, searchResources, updateResource, uploadResource } from "../controllers/resource.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { uploadResourceSchema } from "../validators/resource.validator.js";
 import validate from "../middlewares/validate.middleware.js";
@@ -32,6 +32,9 @@ resourceRouter.get('/resources', getAllResources)
 //route to get search resources
 resourceRouter.get('/resources/search', searchResources)
 
+
+//get single Reosource route (public)
+resourceRouter.get("/:id", getSingleResource)
 
 
 export default resourceRouter;

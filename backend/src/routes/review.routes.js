@@ -2,7 +2,7 @@ import {Router} from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import validate from "../middlewares/validate.middleware.js";
 import {createReviewSchema } from "../validators/review.validator.js"
-import { createReview } from "../controllers/review.controller.js";
+import { createReview, getResourceReviews } from "../controllers/review.controller.js";
 
 const reviewRouter = Router();
 

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Resource } from "../models/resource.model.js";
 
 //uploading resources
@@ -189,3 +190,49 @@ export const searchResources = async (req, res) => {
     });
   }
 };
+
+//to get the single Resource Details (+) the caluclated average ratings
+
+export const getSingleResource = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    //we are using mongoDB aggregation pipeline for complex calculations (all these comments are for me to remember the mongoDB aggreagations)
+
+    const resource =  await Resource.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(id) } //1. find the specific resources
+      },
+      {
+        $lookup: {
+          from: 'reviews', //2. go look in the review collection
+          localField: "_id", //match resource _id...
+          foreignField: "resource", // ...with reviews "resource" field 
+          as: "reviews", //call the result reviews
+        },
+      },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating"}, //3. calculate the average of ratings
+          totalReviews: { $size: "$reviews"}, //4. count the total number of review
+        },
+      },
+      {
+        $project: {
+          reviews: 0, //5. (optional) Don't send the full reviews arrays here (we have a separate route for that)
+        },
+      },
+    ]);
+
+    if(!resource || resource.length === 0){
+      return res.status(404).json({message: "Resource not Found"});
+    }
+
+    //Aggregate returns an array, so we take the first item
+    return res.status(200).json({ resource: resource[0] })
+
+  } catch (error) {
+    console.log("Error in getSingleResource:", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+}
