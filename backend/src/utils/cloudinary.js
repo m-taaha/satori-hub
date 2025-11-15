@@ -20,7 +20,7 @@ const uploadOnCloudinary = async (localFilePath) => {
     });
 
     //file has been uploaded successfully 
-    //console.log("File uploaded to Cloudinary: ", response.url);
+    console.log("File uploaded to Cloudinary: ", response.url);
 
     //We've uploaded the file, so we can remove the loacal temporary version 
     fs.unlinkSync(localFilePath);
