@@ -3,12 +3,17 @@ import { deleteResource, getAllResources, getMyResources, getSingleResource, sea
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { uploadResourceSchema } from "../validators/resource.validator.js";
 import validate from "../middlewares/validate.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const resourceRouter = Router();
 
 //route to upload
 resourceRouter.post("/upload", 
     isAuthenticated, 
+    upload.fields([ //handles file by multer
+        {name: "thumbnailImage", maxCount: 1},
+        {name: "resourceFile", maxCount: 1}, //if resource type is a file because it's optional it could be a stirng too
+    ]),
     validate(uploadResourceSchema) ,uploadResource);
 
 //route to get your own all resources

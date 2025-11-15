@@ -13,20 +13,14 @@ export const uploadResourceSchema = z.object({
 
   difficulty: z.enum(["Hard", "Medium", "Easy"]),
 
-  category: z.
-  string().
-  trim()
-  .min(1, { message: `category cannot be empty` }),
-
-  thumbnailImage: z.string()
-  .url({ message: "Must be a valid URL"})
-  .optional(),
+  category: z.string().trim().min(1, { message: `category cannot be empty` }),
 
   resourceType: z.enum(["file", "link"]),
 
+  // 'resourceLink' is now optional. We'll check it in the controller only if resourceType is 'link'.
   resourceLink: z
-  .string({required_error: `resource link can not be empty`})
-  .trim()
-  .min(1, { message: `resource link cannot be empty`}),
-
+    .string({ required_error: `resource link can not be empty` })
+    .trim()
+    .min(1, { message: `resource link cannot be empty` })
+    .optional(),
 });
