@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Resource } from "../models/resource.model.js";
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
 
 //uploading resources
 export const uploadResource = async (req, res) => {
@@ -9,19 +10,58 @@ export const uploadResource = async (req, res) => {
       description,
       difficulty,
       category,
-      thumbnailImage,
       resourceType,
       resourceLink,
     } = req.body;
 
+    //handle the main resource (file or link)
+    let resourceLinkForDb = "";
+
+    if(resourceType === "file") {
+      //it's a file upload check if the file exists
+      const resourceFileLocalPath = req.files.resourceFile?.[0]?.path;
+
+      if(!resourceFileLocalPath) {
+        return res.status(400).json({message: "Resource file is required when type is file"});
+      }
+
+      //upload to cloudinary
+      const resourceFileUpload = await uploadOnCloudinary(resourceFileLocalPath);
+      if(!resourceFileUpload) {
+        return res.status(500).json({message: "Failed to upload resource file"});
+      }
+      resourceLinkForDb = resourceFileUpload.url; //get the url 
+    
+    } else if(resourceType === 'link') {
+      //it's a link check if the link is provided in the body
+      if(!resourceLink) {
+        return res.status(400).json({message: "Resource link is required when type is 'link'"});
+      }
+      resourceLinkForDb = resourceLink;
+    }
+
+
+    //handle the (optional) thumbnail
+    let thumbnailLinkForDb = "";
+    const thumbnailLocalPath = req.files?.thumbnailImage?.[0]?.path;
+
+    if(thumbnailLocalPath) {
+      const thumbnailUpload = await uploadOnCloudinary(thumbnailLocalPath);
+      if(thumbnailUpload) {
+        thumbnailLinkForDb = thumbnailUpload.url; //get thumbnail url 
+      }
+      //not implementing error for thumbnail upload fails as it's optional
+    }
+
+    //create the resource
     const newResource = await Resource.create({
       title,
       description,
       difficulty,
       category,
-      thumbnailImage,
+      thumbnailImage: thumbnailLinkForDb, //use the new cloudinary url
       resourceType,
-      resourceLink,
+      resourceLink: resourceLinkForDb, //use the new file url or the provided link
       author: req.user._id, // user come from auth-middleware
     });
 
