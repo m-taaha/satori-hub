@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 
 app.use("/api/v1/user", userRouter)
-app.use("/api/v1/resource", resourceRouter )
+app.use("/api/v1/resources", resourceRouter )
 
 app.listen(PORT, () => {
     console.log(`Server is running on: http://localhost:${PORT}`);
