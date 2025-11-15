@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, `Please enter your password`],
       trim: true
-    }
+    },
+    bookmarks: [{
+      type: mongoose.Types.ObjectId,
+      ref: "Resource"
+    }] 
   },
   { timestamps: true }
 );

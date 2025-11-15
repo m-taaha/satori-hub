@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteResource, getAllResources, getMyResources, getSingleResource, searchMyResources, searchResources, updateResource, uploadResource } from "../controllers/resource.controller.js";
+import { deleteResource, getAllResources, getMyResources, getSavedResource, getSingleResource, searchMyResources, searchResources, toggleBookmark, updateResource, uploadResource } from "../controllers/resource.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { uploadResourceSchema } from "../validators/resource.validator.js";
 import validate from "../middlewares/validate.middleware.js";
@@ -41,5 +41,7 @@ resourceRouter.get('/resources/search', searchResources)
 //get single Reosource route (public)
 resourceRouter.get("/:id", getSingleResource)
 
-
+//bookmark routes
+resourceRouter.post("/:id/bookmark", isAuthenticated, toggleBookmark );
+resourceRouter.get("/bookmarks/my-saved", isAuthenticated, getSavedResource);
 export default resourceRouter;

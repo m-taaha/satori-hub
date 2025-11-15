@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { Resource } from "../models/resource.model.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import {User} from "../models/user.model.js"
+import { ca } from "zod/v4/locales";
 
 //uploading resources
 export const uploadResource = async (req, res) => {
@@ -273,6 +275,82 @@ export const getSingleResource = async (req, res) => {
 
   } catch (error) {
     console.log("Error in getSingleResource:", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+}
+
+//toggleBookmark controller
+export const toggleBookmark = async (req, res) => {
+  try{
+    const {id: resourceId} = req.params; //get the resource id from the url 
+    const userId = req.user._id; //get the user id from the auth middleware
+
+    //checking if resources actually exists or not
+    const resources = await Resource.findById(resourceId);
+    if(!resources) {
+      return res.status(404).json({message: "Resource not found"});
+    }
+
+    const user = await User.findById(userId);
+
+    //"toggle" the logic
+    // we'll check if the resource's ID is already in the user's bookmarks array
+    const isBookmarked = user.bookmarks.includes(resourceId);
+
+    let updatedUser;
+    let message;
+
+    if(isBookmarked) {
+      //if it's bookmarked , removed it using $pull
+      updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { bookmarks: resourceId } },
+        { new: true } //this return the updated document 
+      );
+      message = "Bookmark removed successfully";
+    } else {
+      updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { bookmarks: resourceId } },
+        { new: true }
+      );
+      message = "Bookmark added successfully"
+    }
+
+    return res.status(200).json({
+      message,
+      bookmarks: updatedUser.bookmarks, //send back the updated list
+    })
+
+
+  }catch(error){
+    console.log("Bookmark Toggle Error:", error);
+    return res.status(500).json({
+      message: "Server Error"
+    })
+  }
+}
+
+export const getSavedResource = async (req, res) => {
+  try{
+    const userId = req.user._id;
+
+    //find the user and populate their bookmarks
+    //.populate() tells all the mongoose to take all the resource IDs in the bookmarks array and replace them with the actual data
+
+    const user = await User.findById(userId).populate("bookmarks");
+    if(!user){
+      return res.status(404).json({message: "User not found"});
+    }
+
+
+    return res.status(200).json({
+      message: "Saved resources fetched Successfully",
+      bookmarks: user.bookmarks,
+    })
+
+  }catch(error){
+    console.log("Get Saved Resources Error:", error);
     return res.status(500).json({ message: "Server Error" });
   }
 }
