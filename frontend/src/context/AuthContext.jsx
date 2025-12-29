@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from "react";
 
-//create the consext
+//create the context
 const AuthContext = createContext();
 
-//crete the provider component
+//create the provider component
 export const AuthContextProvider = ({children}) => {
     //this state will hold the logged-in user object
     const [authUser, setAuthUser] = useState(null);
