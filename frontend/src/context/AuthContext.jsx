@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "sonner";
+
 
 //create the context
 const AuthContext = createContext();
@@ -7,34 +9,58 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({children}) => {
     //this state will hold the logged-in user object
     const [authUser, setAuthUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     //we'll build login/logout funcitons soon
     const login = async (email, password) => {
-        //TODO call our backend login api
-        // for now let's just pretend we logged in 
-        console.log("Login function called");
-        setAuthUser({
-            id: 123,
-            email: email,
-            firstName: "Test",
-            lastName: "User",
-        });
+        setLoading(true);
+
+         try{
+            const res = await fetch("api/v1/users/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+              credentials: "include",
+            });
+
+            const data = await res.json();
+             
+            if(!res.ok) {
+                throw new Error(data.message || "Login Failed");
+            }
+
+            setAuthUser(data.user);
+            toast.success("Welcome back!", {description: `Logged in as ${data.user.username}`});
+            return true;
+
+
+         }catch(error){
+            toast.error("Login Error",
+                {description: error.message });
+                return false;
+         } finally {
+            setLoading(false)
+         }
+
     };
 
     const logout = async () => {
-        //TODO  call our backend logout api
-        console.log("Logout function called");
-        setAuthUser(null);
+
+        try{
+            const res = await fetch("/api/v1/users/logout", {method: "POST" });
+            if(res.ok) {
+                setAuthUser(null);
+                toast.success("Logged out successfully");
+            }
+        } catch (error) {
+            toast.error("Logout failed");
+        }
     };
 
-    //the 'value' is what all the child components will be able to access
-    const value = {
-        authUser, 
-        login, 
-        logout,
-    };
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    
+    return <AuthContext.Provider value={{ authUser, setAuthUser, login, logout, loading }}>
+        {children}
+        </AuthContext.Provider>;
 };
 
 // creating the custom hook for easy user
