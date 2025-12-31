@@ -1,3 +1,4 @@
+import { success } from "zod";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
@@ -114,6 +115,21 @@ export const logOut = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server Error",
+    });
+  }
+}
+
+export const getMe = async (req, res) => {
+  try{
+    const user = await User.findById(req.user._id).select("-password")
+    return res.status(200).json({
+      success: true,
+      user
+    });
+  }catch(error){
+    console.log("Error in getMe:", error);
+    return res.status(500).json({
+      message: "Server Error"
     });
   }
 }
