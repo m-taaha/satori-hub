@@ -30,7 +30,7 @@ export const AuthContextProvider = ({children}) => {
             }
 
             setAuthUser(data.user);
-            toast.success("Welcome back!", {description: `Logged in as ${data.user.username}`});
+            toast.success("Welcome back!", {description: `Logged in as ${data.user.userName}`});
             return true;
 
 
