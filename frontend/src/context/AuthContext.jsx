@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 
@@ -10,6 +10,26 @@ export const AuthContextProvider = ({children}) => {
     //this state will hold the logged-in user object
     const [authUser, setAuthUser] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    //checking if user is already logged in on refresh
+    useEffect(() => {
+           const checkAuth = async () => {
+             try {
+               const res = await fetch("/api/v1/users/me");
+               const data = await res.JSON();
+               if (res.ok) {
+                 setAuthUser(data.user);
+               }
+             } catch (error) {
+               setAuthUser(null);
+             } finally {
+               setLoading(false);
+             }
+             checkAuth();
+           };
+    }, [])
+
+
 
     //we'll build login/logout funcitons soon
     const login = async (email, password) => {
