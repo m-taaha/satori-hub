@@ -16,7 +16,7 @@ import {
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -72,11 +72,11 @@ const Login = () => {
 
           <CardFooter className="flex flex-col gap-4">
             {/* 4. Using Shadcn Button */}
-            <Button type="submit" className="w-full">
-              Sign In
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in...": "Sign In"}
             </Button>
             <p className="text-center text-sm text-slate-500">
-              Don&apos;t have an account?{" "}
+              Don't have an account?
               <span
                 className="text-blue-600 hover:underline cursor-pointer"
                 onClick={() => navigate("/register")}

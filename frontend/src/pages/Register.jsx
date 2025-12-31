@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from "react";
 import { Card, CardHeader, CardContent, CardDescription, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,28 +16,55 @@ function Register() {
     confirmPassword: ""
   })
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    if (formData.password !== formData.confirmPassword);
-    toast.error("Password do not match!", {
+//checking validation
+    if (formData.password !== formData.confirmPassword) {
+    return toast.error("Password do not match!", {
       description: "Please check your password entries again."
     });
-    return;
+  }
+    setLoading(true);
+    try {
+      //api call
+      const res = await fetch("/api/v1/users/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          userName: formData.userName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
+
+      const data = await res.json();
+
+      if(!res.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+//success toast
+      toast.success("Account Created", {
+        description: `Welcome to Satori Hub,  ${formData.firstName}`,
+      });
+
+      navigate("/login")
+
+    } catch (error) {
+      toast.error("Registration failed", {
+        description: error.message, //from backend
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
-  try{
-    toast.success("Account Created", {
-      description: "Weclome to Satori Hub," + formData.firstName,
-    })
-  }catch(error){
-    toast.error("Registeration failed", {
-      description: "Something went wrong. Please try again."
-    })
-  }
+  
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
@@ -55,8 +82,9 @@ function Register() {
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <label className="text-sm font-medium">First Name</label>
+                <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
                 <Input
+                id="firstName"
                   placeholder="Spidy"
                   required
                   value={formData.firstName}
@@ -66,8 +94,9 @@ function Register() {
                 />
               </div>
               <div className="grid gap-2">
-                <label className="text-sm font-medium">Last Name</label>
+                <label htmlFor="lastName" className="text-sm font-medium">Last Name</label>
                 <Input
+                id="lastName"
                   placeholder="Man"
                   required
                   value={formData.lastName}
@@ -80,20 +109,22 @@ function Register() {
 
             {/* --- Added Username Field --- */}
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Username</label>
+              <label htmlFor="userName" className="text-sm font-medium">Username</label>
               <Input
+              id="userName"
                 placeholder="spidyman"
                 required
-                value={formData.username}
+                value={formData.userName}
                 onChange={(e) =>
-                  setFormData({ ...formData, username: e.target.value })
+                  setFormData({ ...formData, userName: e.target.value })
                 }
               />
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Email</label>
+              <label htmlFor="email" className="text-sm font-medium">Email</label>
               <Input
+              id="email"
                 type="email"
                 placeholder="spidy@example.com"
                 required
@@ -106,8 +137,9 @@ function Register() {
 
             {/* --- Password and Confirm Password --- */}
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Password</label>
+              <label htmlFor="password" className="text-sm font-medium">Password</label>
               <Input
+              id="password"
                 type="password"
                 required
                 value={formData.password}
@@ -118,8 +150,9 @@ function Register() {
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</label>
               <Input
+              id="confirmPassword"
                 type="password"
                 required
                 value={formData.confirmPassword}
@@ -131,8 +164,8 @@ function Register() {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full mt-2">
-              Sign Up
+            <Button type="submit" className="w-full mt-2" disabled={loading}>
+              {loading ? "Creating Account..." : "Sign Up"}
             </Button>
             <p className="text-center text-sm text-slate-500">
               Already have an account?{" "}
