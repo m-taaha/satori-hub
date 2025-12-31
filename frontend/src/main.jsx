@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import { AuthContextProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 
 
 //define all the routes of app here
@@ -31,7 +32,11 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />,
+          </ProtectedRoute>
+        ),
       },
     ],
   },
