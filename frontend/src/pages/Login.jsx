@@ -72,7 +72,7 @@ const Login = () => {
 
           <CardFooter className="flex flex-col gap-4">
             {/* 4. Using Shadcn Button */}
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full m-2" disabled={loading}>
               {loading ? "Logging in...": "Sign In"}
             </Button>
             <p className="text-center text-sm text-slate-500">

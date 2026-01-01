@@ -40,6 +40,7 @@ function Register() {
           userName: formData.userName,
           email: formData.email,
           password: formData.password,
+          confirmPassword: formData.confirmPassword,
         }),
       })
 
