@@ -16,7 +16,7 @@ export const AuthContextProvider = ({children}) => {
            const checkAuth = async () => {
              try {
                const res = await fetch("/api/v1/users/me");
-               const data = await res.JSON();
+               const data = await res.json();
                if (res.ok) {
                  setAuthUser(data.user);
                }
@@ -25,8 +25,8 @@ export const AuthContextProvider = ({children}) => {
              } finally {
                setLoading(false);
              }
-             checkAuth();
-           };
+            };
+            checkAuth();
     }, [])
 
 
@@ -36,7 +36,7 @@ export const AuthContextProvider = ({children}) => {
         setLoading(true);
 
          try{
-            const res = await fetch("api/v1/users/login", {
+            const res = await fetch("/api/v1/users/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ email, password }),

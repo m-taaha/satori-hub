@@ -1,6 +1,6 @@
 import {useAuth} from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
-import { deflate } from "zlib";
+
 
 const ProtectedRoute = ({children}) => {
     const {authUser, loading} = useAuth();
