@@ -87,7 +87,7 @@ function Dashboard() {
               placeholder="Title (e.g. React Hooks Guide)"
               value={formData.title}
               onChange={(e) => {
-                setFormData({ ...formData, title: e.target.value });
+                setFormData(prev => ({ ...prev, title: e.target.value }));
               }}
               required
             />
@@ -97,7 +97,7 @@ function Dashboard() {
               placeholder="Description"
               value={formData.description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData(prev => ({ ...prev, description: e.target.value }))
               }
               required
             />
@@ -107,7 +107,7 @@ function Dashboard() {
                 placeholder="Category (e.g. Frontend)"
                 value={formData.category}
                 onChange={(e) =>
-                  setFormData({ ...formData, category: e.target.value })
+                  setFormData(prev => ({ ...prev, category: e.target.value }))
                 }
                 required
               />
@@ -115,7 +115,7 @@ function Dashboard() {
                 className="border rounded-md p-2 text-sm"
                 value={formData.difficulty}
                 onChange={(e) =>
-                  setFormData({ ...formData, difficulty: e.target.value })
+                  setFormData(prev => ({ ...prev, difficulty: e.target.value }))
                 }
               >
                 <option value="Easy">Easy</option>
@@ -132,7 +132,7 @@ function Dashboard() {
                 name="type"
                 value="link"
                 checked={formData.resourceType === 'link'}
-                onChange={() => setFormData({...formData, resourceType: 'link'})}
+                onChange={() => setFormData(prev => ({...prev, resourceType: 'link'}))}
                  /> Link
               </label>
 
@@ -142,7 +142,7 @@ function Dashboard() {
                 name="type"
                 value="file"
                 checked={formData.resourceType === 'file'}
-                onChange={() => setFormData({...setFormData, resourceType: 'file'})}
+                onChange={() => setFormData(prev => ({...prev, resourceType: 'file'}))}
                  />
                 File
               </label>
@@ -153,7 +153,7 @@ function Dashboard() {
               <Input
               placeholder="https://..."
               value={formData.resourceLink}
-              onChange={(e) => setFormData({...setFormData, resourceLink: e.target.value})}
+              onChange={(e) => setFormData(prev => ({...prev, resourceLink: e.target.value}))}
 
               required
                />
