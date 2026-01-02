@@ -9,7 +9,7 @@ import { FileText, ExternalLink, Trash2 } from "lucide-react";
 function Dashboard() {
   const [loading, setLoading] = useState(false);
     const [resources, setResources] = useState([]);
-    
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -89,6 +89,31 @@ function Dashboard() {
   useEffect(() => {
     fetchMyResources();
   }, []);
+
+//handle delete
+  const handleDelete = async (id) => {
+    // Simple browser confirmation
+    if (!window.confirm("Are you sure you want to delete this resource?"))
+      return;
+
+    try {
+      const res = await fetch(`/api/v1/resources/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Resource deleted successfully");
+        // Refresh the list so the card disappears immediately
+        fetchMyResources();
+      } else {
+        throw new Error(data.message || "Failed to delete");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -265,6 +290,7 @@ function Dashboard() {
                     variant="ghost"
                     size="icon"
                     className="text-red-500 hover:bg-red-50"
+                    onClick={() => handleDelete(resource._id)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
