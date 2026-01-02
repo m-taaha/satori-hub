@@ -10,6 +10,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import Explore from "./pages/Explore";
 
 
 //define all the routes of app here
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             <Dashboard />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/explore",
+        element: <Explore />,
       },
     ],
   },
