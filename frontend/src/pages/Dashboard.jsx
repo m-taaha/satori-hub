@@ -119,6 +119,28 @@ function Dashboard() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Your Dashboard</h1>
 
+      {/* status bar */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <Card className="p-4 bg-blue-600 text-white shadow-md border-none">
+          <p className="text-sm opacity-80">Total Resources</p>
+          <h3 className="text-3xl font-bold">{resources.length}</h3>
+        </Card>
+
+        <Card className="p-4 border-slate-200 shadow-sm">
+          <p className="text-sm text-slate-500 font-medium">Files Shared</p>
+          <h3 className="text-3xl font-bold text-slate-800">
+            {resources.filter((r) => r.resourceType === "file").length}
+          </h3>
+        </Card>
+
+        <Card className="p-4 border-slate-200 shadow-sm">
+          <p className="text-sm text-slate-500 font-medium">Links Shared</p>
+          <h3 className="text-3xl font-bold text-slate-800">
+            {resources.filter((r) => r.resourceType === "link").length}
+          </h3>
+        </Card>
+      </div>
+
       <Card className="max-w-2xl">
         <CardHeader>
           <CardTitle>Upload New Resource</CardTitle>
