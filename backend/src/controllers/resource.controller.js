@@ -185,13 +185,13 @@ export const deleteResource = async (req, res) => {
 //to get all resources publically
 export const getAllResources = async (req, res) => {
   try {
-    const resources = (await Resource.find()).toSorted({createdAt: -1});
+    const resources = await Resource.find().sort({ createdAt: -1 });
 
-    if (!resources) {
-      return res.status(404).json({
-        message: "No Resources Found",
-      });
-    }
+   if (!resources || resources.length === 0) {
+     return res
+       .status(200)
+       .json({ resources: [], message: "No resources found" });
+   }
 
     return res.status(200).json({
       message: "Available Resources",
@@ -223,7 +223,7 @@ export const searchResources = async (req, res) => {
       ];
     }
 
-    const resources = (await Resource.find(filter)).sort({ createdAt: -1 });
+    const resources = await Resource.find(filter).sort({ createdAt: -1 });
     return res.status(200).json({ resources });
   } catch (error) {
     console.log("Error in Seaching My Resources:", error.message);

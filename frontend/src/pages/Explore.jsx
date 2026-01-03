@@ -75,7 +75,7 @@ function Explore() {
                 </div>
                 <CardTitle className="text-lg mt-2 line-clamp-1">{resource.title}</CardTitle>
               </CardHeader>
-              <CardContent className="flex-grow">
+              <CardContent className="grow">
                 <p className="text-sm text-slate-500 line-clamp-2">{resource.description}</p>
               </CardContent>
               <CardFooter className="pt-4 border-t flex gap-2">
