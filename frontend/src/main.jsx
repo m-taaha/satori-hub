@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard'
 import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Explore from "./pages/Explore";
+import Saved from "./pages/Saved";
 
 
 //define all the routes of app here
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "/explore",
         element: <Explore />,
+      },
+      {
+        path: "/saved",
+        element: (
+          <ProtectedRoute>
+            <Saved />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

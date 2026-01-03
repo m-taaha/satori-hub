@@ -32,6 +32,25 @@ function Explore() {
     fetchAllResources(search);
   };
 
+
+  //handle bookmark 
+  const handleBookMark = async (id) => {
+    try {
+
+      const res = await fetch(`/api/v1/resources/${id}/bookmark`, {
+        method: "POST", //controllers handle the logic 
+      });
+
+      const data = await res.json();
+
+      if(res.ok) {
+        toast.success(data.message)
+      }
+    } catch (error) {
+      toast.error("Failed to bookmark");
+    }
+  } ;
+
   return (
     <div className="container mx-auto p-6 space-y-8">
       <div className="text-center space-y-4">
@@ -69,7 +88,12 @@ function Explore() {
                    <span className="text-[10px] font-bold px-2 py-1 bg-blue-50 text-blue-600 rounded-full uppercase tracking-wider">
                     {resource.category}
                   </span>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-300 hover:text-yellow-500">
+                  <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-slate-300 hover:text-yellow-500"
+                  onClick={() => handleBookMark(resource._id)}
+                  >
                     <Bookmark className="w-4 h-4" />
                   </Button>
                 </div>

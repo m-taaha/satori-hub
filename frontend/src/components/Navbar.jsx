@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import { Button } from "@/components/ui/button";
+import { Bookmark } from "lucide-react";
 
 function Navbar() {
 
@@ -40,6 +41,15 @@ function Navbar() {
               >
                 Explore
               </Link>
+
+              <Link
+                to="/saved"
+                className="flex items-center gap-2 text-sm font-medium hover:text-blue-600"
+              >
+                <Bookmark className="w-4 h-4" />
+                Saved
+              </Link>
+
               <div className="flex items-center gap-4 border-l pl-6">
                 <span className="text-sm text-gray-500">
                   Hi, {authUser.firstName}
