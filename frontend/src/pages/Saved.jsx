@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FileText, ExternalLink, BookmarkX } from "lucide-react";
 import { toast } from "sonner";
-
+import { Link } from "react-router-dom";
 
 function Saved() {
     const [bookmarks, setBookmarks] = useState([]);
@@ -64,11 +64,9 @@ function Saved() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookmarks.map((resource) => (
             <Card key={resource._id}>
-              <CardHeader>
-                <CardTitle className="text-lg truncate">
-                  {resource.title}
-                </CardTitle>
-              </CardHeader>
+              <CardTitle className="text-lg truncate hover:text-blue-600 transition-colors">
+                <Link to={`/resource/${resource._id}`}>{resource.title}</Link>
+              </CardTitle>
 
               <CardContent className="grow">
                 <div className="flex items-center gap-2 mb-2">

@@ -12,6 +12,7 @@ import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Explore from "./pages/Explore";
 import Saved from "./pages/Saved";
+import ResourceDetails from "./pages/ResourceDetails";
 
 
 //define all the routes of app here
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             <Saved />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/resource/:id", 
+        element: <ResourceDetails />,
       },
     ],
   },

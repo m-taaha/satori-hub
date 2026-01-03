@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Search, FileText, ExternalLink, Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 function Explore() {
   const [resources, setResources] = useState([]);
@@ -58,7 +60,8 @@ function Explore() {
           Discover Learning Resources
         </h1>
         <p className="text-slate-500 max-w-2xl mx-auto">
-          Browse the best roadmaps, notes, and guides shared by the Satori Hub community.
+          Browse the best roadmaps, notes, and guides shared by the Satori Hub
+          community.
         </p>
       </div>
 
@@ -66,9 +69,9 @@ function Explore() {
       <form onSubmit={handleSearch} className="flex max-w-lg mx-auto gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input 
+          <Input
             className="pl-10"
-            placeholder="Search topics (e.g. React, Solidity)..." 
+            placeholder="Search topics (e.g. React, Solidity)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -79,43 +82,78 @@ function Explore() {
       {/* Grid of All Community Resources */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <p className="col-span-full text-center py-10 text-slate-500">Loading resources...</p>
+          <p className="col-span-full text-center py-10 text-slate-500">
+            Loading resources...
+          </p>
         ) : resources.length > 0 ? (
           resources.map((resource) => (
-            <Card key={resource._id} className="flex flex-col hover:border-blue-200 transition-colors">
+            <Card
+              key={resource._id}
+              className="flex flex-col hover:border-blue-200 transition-colors"
+            >
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start">
-                   <span className="text-[10px] font-bold px-2 py-1 bg-blue-50 text-blue-600 rounded-full uppercase tracking-wider">
+                  <span className="text-[10px] font-bold px-2 py-1 bg-blue-50 text-blue-600 rounded-full uppercase tracking-wider">
                     {resource.category}
                   </span>
-                  <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-slate-300 hover:text-yellow-500"
-                  onClick={() => handleBookMark(resource._id)}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-slate-300 hover:text-yellow-500"
+                    onClick={() => handleBookMark(resource._id)}
                   >
                     <Bookmark className="w-4 h-4" />
                   </Button>
                 </div>
-                <CardTitle className="text-lg mt-2 line-clamp-1">{resource.title}</CardTitle>
+
+                <CardTitle className="text-lg mt-2 line-clamp-1 hover:text-blue-600 transition-colors">
+                  <Link to={`/resource/${resource._id}`}>
+                  {resource.title}
+                  </Link>
+
+                </CardTitle>
               </CardHeader>
               <CardContent className="grow">
-                <p className="text-sm text-slate-500 line-clamp-2">{resource.description}</p>
+                <p className="text-sm text-slate-500 line-clamp-2">
+                  {resource.description}
+                </p>
               </CardContent>
               <CardFooter className="pt-4 border-t flex gap-2">
-                 <Button variant="default" className="w-full text-xs h-9" asChild>
-                    <a href={resource.resourceLink} target="_blank" rel="noreferrer">
-                      {resource.resourceType === "file" ? <FileText className="w-4 h-4 mr-2" /> : <ExternalLink className="w-4 h-4 mr-2" />}
-                      Open Resource
-                    </a>
-                 </Button>
+                <Button
+                  variant="default"
+                  className="w-full text-xs h-9"
+                  asChild
+                >
+                  <a
+                    href={resource.resourceLink}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {resource.resourceType === "file" ? (
+                      <FileText className="w-4 h-4 mr-2" />
+                    ) : (
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                    )}
+                    Open Resource
+                  </a>
+                </Button>
               </CardFooter>
             </Card>
           ))
         ) : (
           <div className="col-span-full text-center py-20">
-            <p className="text-slate-400">No resources found matching "{search}"</p>
-            <Button variant="link" onClick={() => {setSearch(""); fetchAllResources("");}}>Clear search</Button>
+            <p className="text-slate-400">
+              No resources found matching "{search}"
+            </p>
+            <Button
+              variant="link"
+              onClick={() => {
+                setSearch("");
+                fetchAllResources("");
+              }}
+            >
+              Clear search
+            </Button>
           </div>
         )}
       </div>
