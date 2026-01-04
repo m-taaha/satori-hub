@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Search, FileText, ExternalLink, Bookmark } from "lucide-react";
+import { Search, FileText, ExternalLink, Bookmark, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -11,7 +11,7 @@ function Explore() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // We call the 'public' search route you built in the controller
+  // We call the 'public' search route you built in the controller 
   const fetchAllResources = async (query = "") => {
     try {
       setLoading(true);
@@ -107,11 +107,22 @@ function Explore() {
                 </div>
 
                 <CardTitle className="text-lg mt-2 line-clamp-1 hover:text-blue-600 transition-colors">
-                  <Link to={`/resource/${resource._id}`}>
-                  {resource.title}
-                  </Link>
-
+                  <Link to={`/resource/${resource._id}`}>{resource.title}</Link>
                 </CardTitle>
+
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex items-center text-yellow-500">
+                    <Star className="w-3.5 h-3.5 fill-current" />
+                    <span className="text-xs font-bold ml-1">
+                      {resource.averageRating
+                        ? resource.averageRating.toFixed(1)
+                        : "N/A"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-400">
+                    ({resource.totalReviews || 0} reviews)
+                  </span>
+                </div>
               </CardHeader>
               <CardContent className="grow">
                 <p className="text-sm text-slate-500 line-clamp-2">
@@ -141,18 +152,23 @@ function Explore() {
             </Card>
           ))
         ) : (
-          <div className="col-span-full text-center py-20">
-            <p className="text-slate-400">
+          <div className="col-span-full text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed">
+            <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-900 font-semibold">
               No resources found matching "{search}"
+            </p>
+            <p className="text-slate-500 text-sm mt-1">
+              Try different keywords or browse all categories.
             </p>
             <Button
               variant="link"
+              className="mt-4 text-blue-600"
               onClick={() => {
                 setSearch("");
                 fetchAllResources("");
               }}
             >
-              Clear search
+              Clear search and view all
             </Button>
           </div>
         )}
