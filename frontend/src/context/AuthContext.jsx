@@ -9,11 +9,13 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({children}) => {
     //this state will hold the logged-in user object
     const [authUser, setAuthUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     //checking if user is already logged in on refresh
     useEffect(() => {
            const checkAuth = async () => {
+
+            setLoading(true);
              try {
                const res = await fetch(
                  `${import.meta.env.VITE_API_URL}/api/v1/users/me`,{

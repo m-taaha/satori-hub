@@ -6,7 +6,15 @@ const ProtectedRoute = ({children}) => {
     const {authUser, loading} = useAuth();
 
     //if we are still checking the cooki, show nothing or a spinner
-    if(loading) return null;
+    if(loading) {
+        return (
+          <div className="h-screen w-screen flex items-center justify-center">
+            <p className="animate-pulse font-bold text-blue-600">
+              Checking session...
+            </p>
+          </div>
+        );
+    }
 
 
     //if no user is logged in , redirect to login page
