@@ -182,21 +182,40 @@ export const deleteResource = async (req, res) => {
 };
 
 //public controllers
-//to get all resources publically
+//to get all resources publically with aggregation
 export const getAllResources = async (req, res) => {
   try {
-    const resources = await Resource.find().sort({ createdAt: -1 });
+    const resources = await Resource.aggregate([
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "resource",
+          as: "reviews"
+        },
+      },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating"},
+          totalReviews: { $size: "$reviews"},
+        },
+      },
+      {
+        $sort: {createdAt: -1}
+      },
+      {
+        $project: { reviews: 0}
+      },
+    ])
 
-   if (!resources || resources.length === 0) {
-     return res
-       .status(200)
-       .json({ resources: [], message: "No resources found" });
-   }
+
 
     return res.status(200).json({
       message: "Available Resources",
       resources: resources,
     });
+
+
   } catch (error) {
     console.log("get All Resources Error:", error.message);
     return res.status(500).json({
@@ -205,26 +224,48 @@ export const getAllResources = async (req, res) => {
   }
 };
 
-//search resources
+//search resources with aggregation
 export const searchResources = async (req, res) => {
   try {
     const { search, category, difficulty, resourceType } = req.query;
 
-    let filter = {}; 
+    let matchStage = {};
 
-    if (category) filter.category = category;
-    if (difficulty) filter.difficulty = difficulty;
-    if (resourceType) filter.resourceType = resourceType;
+    if (category) matchStage.category = category;
+    if (difficulty) matchStage.difficulty = difficulty;
+    if (resourceType) matchStage.resourceType = resourceType;
 
     if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
-      ];
+     matchStage.$or = [
+      {title: { $regex: search, $options: "i"}},
+      {description: { $regex: search, $options: "i"}},
+     ];
     }
 
-    const resources = await Resource.find(filter).sort({ createdAt: -1 });
-    return res.status(200).json({ resources });
+
+    const resources = await Resource.aggregate([
+      {$match: matchStage}, //filtering first
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "resource",
+          as: "reviews"
+        },
+      },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating"},
+          totalReviews: {$size: "$reviews"},
+        },
+      },
+      {$sort: {createdAt: -1}},
+      {$project: {reviews: 0}}
+    ]);
+    return res.status(200).json({
+      message: "Available Resources",
+      resources: resources,
+    });
   } catch (error) {
     console.log("Error in Seaching My Resources:", error.message);
     return res.status(500).json({
