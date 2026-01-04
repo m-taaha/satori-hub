@@ -63,10 +63,16 @@ function Saved() {
       ) : bookmarks.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookmarks.map((resource) => (
-            <Card key={resource._id}>
-              <CardTitle className="text-lg truncate hover:text-blue-600 transition-colors">
-                <Link to={`/resource/${resource._id}`}>{resource.title}</Link>
-              </CardTitle>
+            <Card
+              key={resource._id}
+              className="flex flex-col h-full hover:shadow-md transition-shadow"
+            >
+              {/* --- FIX HERE: Wrap CardTitle inside CardHeader --- */}
+              <CardHeader>
+                <CardTitle className="text-lg truncate hover:text-blue-600 transition-colors">
+                  <Link to={`/resource/${resource._id}`}>{resource.title}</Link>
+                </CardTitle>
+              </CardHeader>
 
               <CardContent className="grow">
                 <div className="flex items-center gap-2 mb-2">
@@ -74,12 +80,12 @@ function Saved() {
                     {resource.category}
                   </span>
                 </div>
-                <p className="text-sm text-slate-500 line-clamp-2">
+                <p className="text-sm text-slate-500 line-clamp-2 italic">
                   {resource.description}
                 </p>
               </CardContent>
 
-              <CardFooter className="flex gap-2">
+              <CardFooter className="flex gap-2 pt-4 border-t">
                 <Button variant="outline" className="flex-1" asChild>
                   <a
                     href={resource.resourceLink}
@@ -92,6 +98,7 @@ function Saved() {
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="hover:bg-red-50"
                   onClick={() => removeBookmark(resource._id)}
                 >
                   <BookmarkX className="w-4 h-4 text-red-500" />
@@ -101,12 +108,13 @@ function Saved() {
           ))}
         </div>
       ) : (
+        /* ... Empty state remains the same ... */
         <div className="text-center py-20 border-2 border-dashed rounded-lg">
           <p className="text-slate-400 mb-4">
             You haven't saved any resources yet.
           </p>
           <Button variant="outline" asChild>
-            <a href="/explore">Go to Explore</a>
+            <Link to="/explore">Go to Explore</Link>
           </Button>
         </div>
       )}
