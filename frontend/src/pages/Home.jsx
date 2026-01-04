@@ -10,10 +10,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-white overflow-hidden">
-      
       {/* animated bg code */}
       <div className="absolute inset-0 z-0">
-       
         <motion.div
           animate={{
             x: [0, 100, 0],
@@ -74,14 +72,26 @@ export default function Home() {
             transition={{ delay: 0.6 }}
             className="mt-12 flex flex-wrap gap-4"
           >
-            <Button
-              size="lg"
-              className="h-16 px-10 text-lg rounded-2xl shadow-xl shadow-blue-100 transition-all hover:scale-105 active:scale-95 group"
-              onClick={() => navigate("/register")}
-            >
-              Get Started{" "}
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            {authUser ? (
+              <Button
+                size="lg"
+                className="h-16 px-10 text-lg rounded-2xl shadow-xl shadow-blue-100 transition-all hover:scale-105 active:scale-95 group"
+                onClick={() => navigate("/dashboard")}
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="h-16 px-10 text-lg rounded-2xl shadow-xl shadow-blue-100 transition-all hover:scale-105 active:scale-95 group"
+                onClick={() => navigate("/register")}
+              >
+                Get Started
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
+
             <Button
               size="lg"
               variant="outline"
