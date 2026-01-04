@@ -57,6 +57,7 @@ function ResourceDetails() {
           rating: Number(reviewData.rating),
           comment: reviewData.comment,
         }),
+        credentials: "include"
       });
 
       const result = await res.json();

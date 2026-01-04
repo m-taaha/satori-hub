@@ -21,6 +21,7 @@ function Dashboard() {
 
   const [file, setFile] = useState(null);
 
+  //handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,6 +47,7 @@ function Dashboard() {
           //note for me for my learning --- not setting content-type header when using formdata becasue the browser will set automatically with the boundary
 
           body: data,
+          credentials: "include"
         }
       );
 
@@ -78,7 +80,9 @@ function Dashboard() {
   //file resouces
   const fetchMyResources = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/my-resources`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/my-resources`, {
+        credentials: "include"
+      });
       const data = await res.json();
       if (res.ok) {
         setResources(data.resources);
@@ -102,6 +106,7 @@ function Dashboard() {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/delete/${id}`,
         {
           method: "DELETE",
+          credentials: "include"
         }
       );
 

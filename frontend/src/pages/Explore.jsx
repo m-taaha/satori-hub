@@ -42,7 +42,8 @@ function Explore() {
 
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/${id}/bookmark`,
         {
-          method: "POST", //controllers handle the logic
+          method: "POST",
+          credentials: "include" //controllers handle the logic
         }
       );
 

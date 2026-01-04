@@ -17,7 +17,9 @@ function Saved() {
 
     const fetchSaved = async () => {
         try{
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/bookmarks/my-saved`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/bookmarks/my-saved`,{
+              credentials: "include"
+            });
             const data = await res.json();
             
             if(res.ok) {
@@ -39,6 +41,7 @@ function Saved() {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/${id}/bookmark`, {
                 method: "POST",
+                credentials: "include"
             })
 
             if(res.ok) {
