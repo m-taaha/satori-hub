@@ -1,15 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import RootLayout from './layouts/RootLayout'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import { AuthContextProvider } from './context/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RootLayout from './layouts/RootLayout';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import { AuthContextProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from "./components/PublicRoute";
 import Explore from "./pages/Explore";
 import Saved from "./pages/Saved";
 import ResourceDetails from "./pages/ResourceDetails";
@@ -27,11 +28,19 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "register",
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
       {
         path: "dashboard",
@@ -54,7 +63,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/resource/:id", 
+        path: "/resource/:id",
         element: <ResourceDetails />,
       },
     ],

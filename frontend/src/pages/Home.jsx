@@ -50,7 +50,7 @@ export default function Home() {
             className="text-7xl md:text-9xl font-black text-slate-900 leading-[0.85] tracking-tighter"
           >
             ELEVATE <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-500">
               KNOWLEDGE.
             </span>
           </motion.h1>
