@@ -17,7 +17,7 @@ function Saved() {
 
     const fetchSaved = async () => {
         try{
-            const res = await fetch("/api/v1/resources/bookmarks/my-saved");
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/bookmarks/my-saved`);
             const data = await res.json();
             
             if(res.ok) {
@@ -37,7 +37,7 @@ function Saved() {
     //remove bookmark
     const removeBookmark = async (id) => {
         try {
-            const res = await fetch(`/api/v1/resources/${id}/bookmark`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/${id}/bookmark`, {
                 method: "POST",
             })
 

@@ -40,12 +40,14 @@ function Dashboard() {
     }
 
     try {
-      const res = await fetch("/api/v1/resources/upload", {
-        method: "POST",
-        //note for me for my learning --- not setting content-type header when using formdata becasue the browser will set automatically with the boundary
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/upload`,
+        {
+          method: "POST",
+          //note for me for my learning --- not setting content-type header when using formdata becasue the browser will set automatically with the boundary
 
-        body: data,
-      });
+          body: data,
+        }
+      );
 
       const result = await res.json();
 
@@ -76,7 +78,7 @@ function Dashboard() {
   //file resouces
   const fetchMyResources = async () => {
     try {
-      const res = await fetch("/api/v1/resources/my-resources");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/my-resources`);
       const data = await res.json();
       if (res.ok) {
         setResources(data.resources);
@@ -97,9 +99,11 @@ function Dashboard() {
       return;
 
     try {
-      const res = await fetch(`/api/v1/resources/delete/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const data = await res.json();
 

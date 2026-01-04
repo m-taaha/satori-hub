@@ -15,7 +15,8 @@ function Explore() {
   const fetchAllResources = async (query = "") => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/v1/resources/resources/search?search=${query}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/resources/search?search=${query}`
+      );
       const data = await res.json();
       if (res.ok) setResources(data.resources);
     } catch (error) {
@@ -39,9 +40,11 @@ function Explore() {
   const handleBookMark = async (id) => {
     try {
 
-      const res = await fetch(`/api/v1/resources/${id}/bookmark`, {
-        method: "POST", //controllers handle the logic 
-      });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/${id}/bookmark`,
+        {
+          method: "POST", //controllers handle the logic
+        }
+      );
 
       const data = await res.json();
 

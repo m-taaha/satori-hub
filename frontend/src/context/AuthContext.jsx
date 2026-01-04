@@ -15,7 +15,7 @@ export const AuthContextProvider = ({children}) => {
     useEffect(() => {
            const checkAuth = async () => {
              try {
-               const res = await fetch("/api/v1/users/me");
+               const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/me`,);
                const data = await res.json();
                if (res.ok) {
                  setAuthUser(data.user);
@@ -36,12 +36,14 @@ export const AuthContextProvider = ({children}) => {
         setLoading(true);
 
          try{
-            const res = await fetch("/api/v1/users/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
-              credentials: "include",
-            });
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/login`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+                credentials: "include",
+              }
+            );
 
             const data = await res.json();
              
@@ -67,7 +69,9 @@ export const AuthContextProvider = ({children}) => {
     const logout = async () => {
 
         try{
-            const res = await fetch("/api/v1/users/logout", {method: "POST" });
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/logout`,
+              { method: "POST" }
+            );
             if(res.ok) {
                 setAuthUser(null);
                 toast.success("Logged out successfully");

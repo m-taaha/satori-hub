@@ -16,7 +16,7 @@ function ResourceDetails() {
   //fetch refviews separately
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`/api/v1/reviews/${id}/reviews`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/reviews/${id}/reviews`);
       const data = await res.json();
 
       if (res.ok) setReview(data.reviews);
@@ -29,7 +29,7 @@ function ResourceDetails() {
   useEffect(() => {
     const fetchResource = async () => {
       try {
-        const res = await fetch(`/api/v1/resources/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/resources/${id}`);
         const data = await res.json();
 
         if (res.ok) {
@@ -50,7 +50,7 @@ function ResourceDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/v1/reviews/${id}/review`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/reviews/${id}/review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

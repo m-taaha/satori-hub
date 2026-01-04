@@ -31,18 +31,20 @@ function Register() {
     setLoading(true);
     try {
       //api call
-      const res = await fetch("/api/v1/users/register", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          userName: formData.userName,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-        }),
-      })
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            userName: formData.userName,
+            email: formData.email,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword,
+          }),
+        }
+      );
 
       const data = await res.json();
 
