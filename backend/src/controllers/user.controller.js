@@ -72,8 +72,8 @@ export const loginUser = async (req, res) => {
       //set userToken in httpOnly cookies
       res.cookie("userToken", userToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, //7days
       });
 
@@ -102,7 +102,7 @@ export const logOut = async (req, res) => {
   try {
     res.clearCookie("userToken", {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
     });
 
