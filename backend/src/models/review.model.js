@@ -22,4 +22,8 @@ const reviewSchema = new mongoose.Schema({
     }
 },{timestamps: true})
 
+
+//prevent user to from leaving multiple reviews  on the same resources
+reviewSchema.index({user: 1, resource: 1}, {unique: true});
+
 export const Review = mongoose.model("Review", reviewSchema);
